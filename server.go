@@ -1,7 +1,7 @@
 package main
 
 import (
-	"bufio"
+	"io"
 	"net"
 )
 
@@ -20,9 +20,9 @@ func main() {
 
 		go func(c net.Conn) {
 			defer c.Close()
-			w := bufio.NewWriter(c)
-			w.WriteString("OK\n")
-			w.Flush()
+			if _, err := io.WriteString(c, "OK\n"); err != nil {
+				return
+			}
 		}(conn)
 	}
 }
